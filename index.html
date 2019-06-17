@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Avaliação do modelo de Luedeking-Piret na predição da produção de toxinas, obedecendo a cinética de crescimento de Monod</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="João Víctor Balestrin Sartor" />
+    <meta name="date" content="2019-04-07" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/uo.css" rel="stylesheet" />
+    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <script src="libs/kePrint/kePrint.js"></script>
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Avaliação do modelo de Luedeking-Piret na predição da produção de toxinas, obedecendo a cinética de crescimento de Monod
+### João Víctor Balestrin Sartor
+### 04/07/2019
+
+---
+
+
+
+
+
+
+
+background-image: url("https://raw.githubusercontent.com/mustachius/ProjetosR/master/Imagem1.png")
+background-position: top, 80%
+background-size: 30%
+class: center, middle
+
+# Autores:
+João Víctor Balestrin Sartor &lt;br&gt;
+&lt;a href="mailto:jvsaga@gmail.com"&gt;&lt;/i&gt;&amp;nbsp; jvsaga@gmail.com&lt;/a&gt;&lt;br&gt;
+
+#### Departamento de Eng. de Alimentos e Eng. Química.
+**Orientador**:&lt;br&gt;
+Prof. Dr. Weber da Silva Robazza&lt;sup&gt;*&lt;/sup&gt; &lt;br&gt;
+&lt;a href="mailto:wrobazzi@yahoo.com.br"&gt;&lt;/i&gt;&amp;nbsp; wrobazzi@yahoo.com.br&lt;/a&gt;&lt;br&gt;
+
+**Coorientador**: &lt;br&gt;
+Prof. Dr. Alessandro Cazonatto Galvão&lt;sup&gt;*&lt;/sup&gt; &lt;br&gt;
+&lt;a href="mailto:eng.a.c.galvao@gmail.com"&gt;&lt;i class="fa fa-paper-plane fa-fw"&gt;&lt;/i&gt;&amp;nbsp; eng.a.c.galvao@gmail.com&lt;/a&gt;&lt;br&gt;
+
+---
+class: center, middle, inverse
+
+# Estrutura
+---
+# Tabela de conteúdo
+
+1. *Staphylococcus aureus*;
+2. Patologia;
+3. Histórico de Surtos Alimentares no Brasil;
+4. Materiáis e Métodos;
+5. Resultados e Discussões;
+---
+# *Staphyloccocus aureus*
+
+.pull-right[&lt;img src = "https://raw.githubusercontent.com/mustachius/ProjetosR/master/Staphylococcus-Aureus.jpg"&gt;]
+
+.pull-left[
+O gênero *Staphylococcus* abrange:
+- Gram positivas;
+- não formadora de esporos;
+- anaeróbias facultativas;
+- **catalase-positivas, ou negativas**;
+]
+--
+
+.pull-left[
+Família contém mais de **40 espécies reconhecidas** - divididas de acordo com a capacidade de produzir, ou não, a enzima catalase.
+
+- A grande maioria `-&gt;` coagulase-negativa.&lt;br&gt;
+- ***S. aureus* `-&gt;` coagulase-positivo.**
+]
+---
+# *Staphyloccocus aureus*
+.pull-left[
+&lt;img src="https://media.giphy.com/media/wlBqb0ps2NWUM/giphy.gif" width="90%" /&gt;
+#### Nomenclaura baseada em seu formato geométrico:
+- *staphyle*`-&gt;`	"cacho"
+- *kokkos*`-&gt;`		"bagas"
+]
+
+--
+
+.pull-rigth[
+### Condições ótimas para crescimento: 
+- **Temperatura**: 35°C
+- **pH**: 7,0 ~ 7,5 `-&gt;` pode sobreviver à 4,5
+- **aw**: ≤ 0,8
+  
+### Associado à:
+ - Surtos alimentares com consumo de alimentos com **características variadas**;
+ - infecções de Pele;
+
+### Normalmente encontrado em:
+- Pele;
+- Mucosas;
+- Interior do nariz e orelhas;
+  
+  ]
+---
+class: middle, center, inverse
+
+# Patologia
+---
+class: center, middle
+&lt;img src = "https://raw.githubusercontent.com/mustachius/ModeloLPM/master/Not%C3%ADcia%201.png" width = 600&gt; &lt;br&gt;
+&lt;small&gt;Fonte: &lt;a href="https://g1.globo.com/ciencia-e-saude/noticia/2019/02/12/fiquei-paraplegica-por-causa-de-um-piercing.ghtml"&gt; G1, 2019&lt;/a&gt;&lt;/small&gt;
+---
+class: center, middle
+![imagem 2](https://raw.githubusercontent.com/mustachius/ModeloLPM/master/Not%C3%ADcia%202.png)
+&lt;small&gt;Fonte: &lt;a href="https://saude.estadao.com.br/noticias/geral,o-que-e-a-staphylococcus-aureus-bacteria-que-levou-a-morte-do-neto-de-lula,70002778278"&gt; O Estado de São Paulo, 2019&lt;/a&gt;&lt;/small&gt;
+---
+## Enterotoxinas Estafilocócicas (SE)
+
+- Dos vários compostos produzidos pelo *S. aureus*, o de maior interesse científico são as **enterotoxinas estafilocícicas**; &lt;br&gt;
+
+--
+
+### SE são compostos capazes de:
+- danificar membranas celulares;
+- desencadear Síndrome do Choque Tóxico;
+
+--
+
+&lt;p&gt;&lt;center&gt;&lt;h3&gt;S. aureus é capaz de produzir 23 tipos diferentes de compostos tóxicos diferentes;&lt;/h3&gt;&lt;/p&gt;&lt;/center&gt;
+
+--
+&lt;br&gt;
+&lt;center&gt; Apenas 5 são classificadas como **Enterotoxinas Estafilocócicas Clássicas** e detectadas por testes comerciais: SEA, SEB, SEC, SED, SEE. &lt;center&gt;
+&lt;br&gt;
+--
+&lt;center&gt; Outras entorotoxinas também já foram sequenciadas: **G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V e X**. &lt;center&gt;
+
+---
+## Nomenclatura
+Cômitê Internacinal de Nomenclatura para Superantígenos de Staphylococcus (**INCSSN**) recomenda que o termo enterotoxina seja smente utilizado para compostos eméticos.
+
+--
+
+&gt;&lt;p style = "font-size:25px;"&gt;Às demais toxinas designou-se o termo &lt;b&gt;"Enterotoxina estafilocócica semelhante a superantígeno"&lt;/b&gt;, ou (Staphylococcal Enterotoxin-like Superantigens - &lt;b&gt;SEI&lt;/b&gt;).&lt;/p&gt;
+
+
+--
+&lt;br&gt;
+- SEJ, SEK, ..., SEU `-&gt;` SEIJ. SEIK, ..., SEIU.
+- Excessões: **SEIG, SEIH** e **SEII**, que já apresentaram atividade emética.
+
+
+--
+
+&gt;SEF `-&gt;` comprovou-se posteriormente à sua descoberta que não produz atividade emética.
+
+---
+class: center, middle
+
+# Enterotoxinas clássicas possuem alta resistência e não são desnaturadas durante o processo de pasteurização.
+# SEA e SEC são as toxinas mais associadas à casos de intoxicação.
+---
+class: center, middle, inverse
+
+# Histórico de contaminação alimentar no Brasil
+---
+## Doenças transmitidas por alimentos - DTA's
+
+No Brasil, os casos de infecção estafilocócica não são de notificação compulsória ao Ministério da Saúde;
+
+Surtos de Doenças Transmitidas por Alimentos - DTA devem ser registrados compulsóriamente desde 2017.
+
+--
+
+&gt;DTA - síndrome constituída de anorexia, náuseas, vômitos e/ou diarreia, acompanhada ou não de febre, relacionada à ingestão de alimentos ou água contaminados, podendo abranger tanto infecções como intoxicações alimentares.
+
+
+--
+- Podem ser causadas por bactérias, vírus, parasitas, toxinas, príons, agrotóxicos, substâncias químicas e metais pesados;
+
+- Quadro clínico variando desde desconfortos intestinais leves, até quadros extremamente sérios com desidratações graves, diarreia sanguinolenta e insuficiência renal aguda.
+---
+## Doenças transmitidas por alimentos - DTA's
+
+Define-se como surto, um episódio em que duas ou mais pessoas apresentam os mesmos sinais/sintomas após a ingestão de alimento e/ou água proveniente da mesma fonte.
+
+- Toda DTA `-&gt;` Evento de Saúde Pública - ESP.
+
+- ESP `-&gt;` Registro no Sistema de Informação de Agravos de Notificação (**SINAN**), em até sete dias.
+---
+class: center, middle
+![Investigação DTA](https://raw.githubusercontent.com/mustachius/ModeloLPM/master/investiga%C3%A7%C3%A3o%20SINAN.png)
+---
+### Acontecimento de surtos não segue um padrão definido
+- Políticas de prevenção e controle de DTA'a ineficientes ou inexistentes.
+![figura1](https://raw.githubusercontent.com/mustachius/ModeloLPM/master/Figura%201.png)
+---
+## Agentes mais comumente envlvidos em surtos de DTA no Brasil de 2000 à 2017
+
+![](https://raw.githubusercontent.com/mustachius/ModeloLPM/master/Agente%20por%20regi%C3%A3o.png)&lt;!-- --&gt;
+---
+## Objetivo Geral
+
+Avaliar a eficácia do modelo LPM na predição de produção de enterotoxinas por *Staphylococcus aureus* em **diferentes alimentos**, em **diferentes condições.**
+
+---
+
+## Objetivos específicos
+
+- Avaliar em quais condições de temperatura o modelo obtém mlehores resultados;
+- Estimar a dependência dos parâmetros do modelo com as condições ambientais;
+- Verificar as condições de validade do modelo.
+
+---
+class: center, middle, inverse
+
+# Materiais e métodos
+---
+## Dados experimentais
+.pull-left[
+
+Pesquisa em bases de dados conhecidas:
+- *"Staphylococcus aureus"*;
+- *"enterotoxin"*;
+- *"production"*;
+- *"detection"*;
+- *"modeling"*.
+
+Dados de crescimento e produção expressos em:
+- UFC/mL
+- g/mL
+]
+
+--
+.pull-right[
+### Get Data Graph Digitizer 2.23.0.20
+&lt;img src="https://raw.githubusercontent.com/mustachius/ModeloLPM/master/Imagem_getdata.jpg" style="display: block; margin: auto;" /&gt;
+
+&lt;img src="https://raw.githubusercontent.com/mustachius/ModeloLPM/master/imagem_getdata2.gif" style="display: block; margin: auto;" /&gt;
+
+]
+---
+## Súmário de dados
+
+&lt;h3&gt;&lt;center&gt;8 Artigos `-&gt;` 55 curvas de crescimento de *S. aureus* + 55 curvas de produção de enterotoxinas.&lt;/h3&gt;&lt;/center&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Toxina &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Curvas &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;width: 7em; "&gt; SEA &lt;/td&gt;
+   &lt;td style="text-align:right;width: 7em; "&gt; &lt;span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: lightgreen; width: 37.74%"&gt;22&lt;/span&gt; &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;width: 7em; "&gt; SEB &lt;/td&gt;
+   &lt;td style="text-align:right;width: 7em; "&gt; &lt;span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: lightgreen; width: 1.89%"&gt;3&lt;/span&gt; &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;width: 7em; "&gt; SEC &lt;/td&gt;
+   &lt;td style="text-align:right;width: 7em; "&gt; &lt;span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: lightgreen; width: 24.53%"&gt;15&lt;/span&gt; &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;width: 7em; "&gt; SEC1 &lt;/td&gt;
+   &lt;td style="text-align:right;width: 7em; "&gt; &lt;span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: lightgreen; width: 0.00%"&gt;2&lt;/span&gt; &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;width: 7em; "&gt; SEC2 &lt;/td&gt;
+   &lt;td style="text-align:right;width: 7em; "&gt; &lt;span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: lightgreen; width: 0.00%"&gt;2&lt;/span&gt; &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;width: 7em; "&gt; SEH &lt;/td&gt;
+   &lt;td style="text-align:right;width: 7em; "&gt; &lt;span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: lightgreen; width: 0.00%"&gt;2&lt;/span&gt; &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;width: 7em; "&gt; A + C + D &lt;/td&gt;
+   &lt;td style="text-align:right;width: 7em; "&gt; &lt;span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: lightgreen; width: 13.21%"&gt;9&lt;/span&gt; &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;width: 7em; font-weight: bold;"&gt; Total &lt;/td&gt;
+   &lt;td style="text-align:right;font-weight: bold;width: 7em; "&gt; &lt;span style="display: inline-block; direction: rtl; border-radius: 4px; padding-right: 2px; background-color: lightgreen; width: 100.00%"&gt;55&lt;/span&gt; &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;br&gt;
+&lt;center&gt;Temperatura variando entre 10°C e 48°C.&lt;center&gt;
+---
+##Modelagem Matemática
+
+
+- Confecção de "scripts" para tratamento de dados.
+  - Regressões não-lineares `-&gt;` algoritimo de *Levenberg-Marquardt*.
+
+--
+- R Project v. 3.5.3 (2019-03-11) – "Great Truth"
+- RStudio Version 1.1.463 (R Core Team, 2013;RStudio Team, 2018)
+- Pacote *minpack.lm*
+---
+##Modelo LPM
+
+### Equação de Luedeking-Piret (1959)
+&lt;br&gt;
+`$$\frac{dP}{dt} = \alpha\frac{dX}{dt}+\beta X \tag{1}$$`
+???
+`\(\alpha\)` e `\(\beta\)` `-&gt;` Constantes de proporcionalidade;&lt;br&gt;
+`\(X\)` `-&gt;` Concentração microbiana; &lt;br&gt;
+`\(P\)` `-&gt;` Expressa mg de ácido láctico por mL de solução (Luedeking-Piret) &lt;br&gt;
+`\(t\)` `-&gt;` Tempo.
+
+--
+
+### Equação de Monod (1949)
+&lt;br&gt;
+`$$\frac{dX}{dt} = \mu \cdot X \tag{2}$$`
+???
+`\(\mu\)` `-&gt;` Velocidade de crescimento específico
+
+--
+
+### Velocidade de crescimento específico
+&lt;br&gt;
+`$$\mu = \frac{\mu_{max}\cdot S}{K_s + S} \tag{3}$$`
+???
+`\(K_s\)` -&gt; constante de meia velocidade
+`\(S\)` -&gt; substrato limitante
+Pode-se assumir que quando a quantidade de substrato é muito grande, o valor de `\(u\)` é praticamente o mesmo de `\(\mu_{max}\)`, pois a grande disponibilidade de alimento permite que o micro-organismo em questão desenvolva-se livremente. Ao diminuir-se o valor de `\(S\)`, o valor de `\(\mu\)` será exatamente a metade de `\(\mu_{max}\)` quando o valor de `\(K_s\)` for igual à `\(S\)`.
+
+---
+### Garnier e Gaillet (2015)
+
+Taxa de consumo de `\(S\)` como sendo `\(Y_{x/s}\)`, negligenciando a taxa de morte celular, de forma que o balanço de massa fica dependente da concentração de biomassa `\(S\)`.
+
+`$$\frac{dS}{dt}= -q_s \cdot X \tag{4}$$`
+
+???
+`\(q_s\)` representa a taxa de consumo específico de substrato, relacionando-se diretamente com `\(\mu\)`
+
+
+--
+
+### Taxa de consumo específico de substrato
+`$$q_s = \frac{\mu}{Y_{x/s}} \tag{5}$$`
+
+--
+
+### Constante de rendimento celular
+$$ Y_{x/s}=\frac{dX}{dS} \tag{6}$$
+
+`\(Y_{x/s}\)` também pode ser utilizado para expressar a relação entre o substrato limitante e a concentração microbiana de acordo com:
+
+`$$S = \frac{1}{Y_{x/s}} \cdot (X_{max}-X) \tag{7}$$`
+
+---
+Ao combinar as equações 1, 2 e 4
+
+`$$t = a_1 \cdot ln\left(\frac{X}{X_0}\right) + a_2 \cdot ln\left(\frac{(X_{max}-X)}{(X_{max}-X_0)}\right) \tag{8}$$`
+
+--
+Onde `\(a_1\)` e `\(a_2\)` são dados pelas seguintes relações:
+
+`$$a_1 = \frac{(K_s\cdot Y_{x/s}+X_{max})}{\mu_{max} \cdot X_{max}} \tag{9}$$`
+
+`$$a_2 = - \frac{K_s \cdot Y_{x/s}}{\mu_{max} \cdot X_{max}} \tag{10}$$`
+
+--
+A reorganização das variáveis permite calcular `\(\mu_{max}\)` e obter o produto entre `\(K_S\)` e `\(Y_{x/s}\)` como:
+
+`$$mu_{max}=\frac{1}{a_1+a_2} \tag{11}$$`
+
+`$$K_S \cdot Y_{x/s} =- \frac{a_2}{a_1+a_2}X_{max} \tag{12}$$`
+---
+Finalmente, a quantidade de Produto (P) formado pode ser expressa como:
+
+`$$P - P_0 = b_1 \cdot (X - X_0) + b_2 \cdot ln\left(\frac{X_{max}-X}{X_{max}-X_0}\right) \tag{13}$$`
+--
+
+`$$b_1 = \alpha + \frac{\beta}{\mu_{max}} \tag{14}$$`
+
+`$$b_2= - \frac{\beta \cdot K_S \cdot Y_{x/s}}{\mu_{max}} \tag{15}$$`
+--
+### Parâmetros da equação de Luedeking-Piret:
+
+`$$\alpha = b_1 + \frac{b_2}{K_S \cdot Y_{x/s}} \tag{16}$$`
+
+`$$\beta = - \frac{b_2 \cdot \mu_{max}}{K_s \cdot Y_{x/s}} \tag{17}$$`
+
+--
+
+`$$\frac{1}{N}\frac{dP}{dt} = \alpha k + \beta \tag{18}$$`
+
+Uma vez que se divida a equação 1 por `\(N\)` e que `\(k = (1/N)(dN/dt)\)`. Com `\(k\)` sendo a taxa de crescimento específica (logarítmica) e `\(N\)` a densidade bacteriana.
+---
+## Crescimento de *S. aureus*
+
+- Equação 8 foi ajustada à t e X.
+- X0 -&gt; X quando t apresenta o menor valor.
+- Xmax -&gt; valor ligeiramente superior ao maior valor de X.
+
+## Produção de enterotoxinas estafilocócicas
+
+Resultados da primeira regressão não-linear foram submetidos à Equação 13.
+---
+class: center, middle, inverse
+# Resultados e discussões
+---
+## Classificação dos conjuntos de dados
+
+- Curvas analisadas bastante heterogêneas;
+- Resultados obtidos heterogêneos.
+
+Borst e Betley (1993), Czop e Bergdoll (1974) e Otero et al. (1990) verificaram padrões de produção diferentes para cada enterotoxina.
+
+&lt;table class="table" style="font-size: 15px; width: auto !important; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; SA &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; SE &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Nota &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;width: 20em; "&gt; Fases de desenvolvimento bem definidas e função não crescente &lt;/td&gt;
+   &lt;td style="text-align:left;width: 20em; "&gt; Ponto de início de produção de enterotoxina bem definido e função não crescente &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;width: 20em; "&gt; Fases de desenvolvimento não tão definidas e máximo de 1 (um) ponto distoando de função não crescente &lt;/td&gt;
+   &lt;td style="text-align:left;width: 20em; "&gt; Ponto de início de produção de enterotoxina não tão definido e pelo menos um ponto distoando da função não crescente &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;width: 20em; "&gt; Fases de desenvolvimento não definidas e até de 30% dos pontos distoando de uma função não crescente &lt;/td&gt;
+   &lt;td style="text-align:left;width: 20em; "&gt; Ponto de início de produção de enterotoxina não tão definido e até de 30% dos pontos distoando de uma função não crescente &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;width: 20em; "&gt; Fases de desenvolvimento indefinidas e mais de 30% dos pontos distoando de uma função não crescente &lt;/td&gt;
+   &lt;td style="text-align:left;width: 20em; "&gt; Ponto de início de produção de enterotoxina indefinido e mais de 30% dos pontos distoando de uma função não crescente &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+---
+## Exemplos de notas para SA
+
+&lt;img src="https://raw.githubusercontent.com/mustachius/ModeloLPM/master/Figura%207.png" style="display: block; margin: auto;" /&gt;
+---
+## Exemplos de notas para SE
+&lt;img src="https://raw.githubusercontent.com/mustachius/ModeloLPM/master/Figura%208.png" style="display: block; margin: auto;" /&gt;
+---
+## Distribuição das notas para SA e SE
+&lt;img src="https://raw.githubusercontent.com/mustachius/ModeloLPM/master/Figura%209.png" style="display: block; margin: auto;" /&gt;
+---
+## Sumário dos resultados da primeira regressão não-linear
+&lt;table class="table" style="font-size: 15px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+&lt;tr&gt;
+&lt;th style="border-bottom:hidden" colspan="7"&gt;&lt;/th&gt;
+&lt;th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2"&gt;&lt;div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; "&gt;Range 98%&lt;/div&gt;&lt;/th&gt;
+&lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Parâmetro &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Média &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; D. Padrão &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; C. Variância &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Oblíquidade &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Curtose &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; IQR &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Min &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Max &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; a1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 255 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.346 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5,3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0,93 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8,1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 248,0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -3.077 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.550 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; a2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 374 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.779 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10,0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -1,50 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12,0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 73,0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -14.054 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9.455 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; b1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 17 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 137 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8,0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6,30 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 45,0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3,3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -117 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 548 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; b2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.448 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 35.899 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8,1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7,20 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 53,0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4,0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -7.012 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 123.850 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+---
+## Sumário dos resultados da segunda regressão não-linear
+&lt;table class="table" style="font-size: 15px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+&lt;tr&gt;
+&lt;th style="border-bottom:hidden" colspan="7"&gt;&lt;/th&gt;
+&lt;th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2"&gt;&lt;div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; "&gt;Range 98%&lt;/div&gt;&lt;/th&gt;
+&lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Parâmetro &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Média &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; D. Padrão &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; C. Variância &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Oblíquidade &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Curtose &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; IQR &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Min &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Max &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; umax &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0,042 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0,26 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6,1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2,00 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 14 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0,057 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0,58 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0,97 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; ks.ys &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -26,000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 120,00 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -4,6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -6,20 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 42 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 14,000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -538,42 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 38,22 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; alpha &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0,890 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6,80 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7,7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0,91 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 11 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1,200 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -20,10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 23,91 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; beta &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0,140 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0,46 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3,2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4,60 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 24 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0,092 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0,06 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2,30 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+---
+## Valores de referência
+
+- Classificação de curvas permitiu relacionar os dados de entrada e saída;
+- Curvas que obtiveram valores de nota 4 foram utilizadas como referência
+	- SA: 5 curvas
+	- SE: 8 curvas
+
+- Determinação dos valores adequados por curvas de densidade de probabilidade.
+---
+### Densidade de probabilidade para `\(a_{1}\)`, `\(a_{2}\)`, `\(b_{1}\)` e `\(b_{2}\)`
+&lt;img src="https://raw.githubusercontent.com/mustachius/ModeloLPM/master/Figura%2010.png" style="display: block; margin: auto;" /&gt;
+---
+### Densidade de probabilidade para `\(\mu_{max}\)`, `\(K_{s} \cdot Y_{x/s}\)`, `\(\alpha\)` e `\(\beta\)`
+&lt;img src="https://raw.githubusercontent.com/mustachius/ModeloLPM/master/Figura%2011.png" style="display: block; margin: auto;" /&gt;
+---
+## Sumário de probabilidade `\(a_{1}\)`, `\(a_{2}\)`, `\(b_{1}\)` e `\(b_{2}\)` 
+&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Parâmetro &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Min &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Max &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Probabilidade &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; a1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2,880 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 19,498 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0,047 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; a2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -5,251 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0,783 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0,491 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; b1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0,096 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 31,485 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0,047 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; b2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -38,249 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0,655 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0,322 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+## Sumário de probabilidade `\(\mu_{max}\)`, `\(K_{s} \cdot Y_{x/s}\)`, `\(\alpha\)` e `\(\beta\)`
+&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Parâmetro &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Min &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Max &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Probabilidade &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; umax &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0,694 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0,120 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0,783 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; ks.ys &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -31,666 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1,879 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0,614 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; alpha &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -1,344 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0,258 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0,216 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; beta &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0,028 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0,105 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0,238 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+---
+####Avaliou-se o Erro Percentual Médio (EPM) mais detalhadamente devido variação dos resultados.
+- SE real: 0,01 ng/g
+- SE pred: 0,19 ng/g
+
+.center[&lt;center&gt;&lt;h3&gt;EPM = 1900%&lt;/h3&gt;&lt;/center&gt;]
+
+####Para avaliar a influência das notas:
+- EPM para P &lt; 1;
+- EPM para P &gt; 1;
+	
+#### Regressões lineares de EPM em função de outros parâmetros.
+---
+class: middle, center
+&lt;img src="https://raw.githubusercontent.com/mustachius/ModeloLPM/master/Tabela%2013.png" style="display: block; margin: auto;" /&gt;
+---
+class: middle, center
+&lt;img src="https://raw.githubusercontent.com/mustachius/ModeloLPM/master/Tabela%2014.png" style="display: block; margin: auto;" /&gt;
+---
+class: middle, center, inverse
+# Simulação do crescimento de *S. aureus* e produção de enterotoxinas
+---
+# Simulação
+
+Utilizou-se modelo simplificado
+
+`$$X = X_{0} \cdot 2^{\frac{t-tlag}{td}}$$`
+
+`$$P = P_{0} + log_{10} X \cdot Y_{px}$$`
+
+Considerou-se:
+- `\(X_{0}\)` como 20 unidades de *S. aureus*
+- `\(t\)` variando entre 0 e 500 horas. &lt;br&gt;
+--
+
+#### Parâmetros da primeira simulação
+&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Parâmetro &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Valor Médio &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; D. Padrão &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; &lt;i&gt;t&lt;/i&gt; fase lag &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 15,000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; &lt;i&gt;t&lt;/i&gt; fase exponencial &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 40,000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; &lt;i&gt;t&lt;/i&gt; fase estacionária &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 100,000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; µ &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0,001 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5e-05 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Y&lt;sub&gt;px&lt;/sub&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0,002 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5e-04 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; X&lt;sub&gt;0&lt;/sub&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 20,000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+---
+## Comparação entre simulação e Fujikawa et al. (2006) - 32 °C
+
+&lt;img src="https://raw.githubusercontent.com/mustachius/ModeloLPM/master/Rplot12.png" width="700px" style="display: block; margin: auto;" /&gt;
+---
+&gt; Variação de temperatura afeta crescimento bacteriano e produção de enterotoxinas.&lt;br&gt; 
+
+--
+- Nesta simulação expressa por &lt;i&gt;td&lt;/i&gt;
+
+`$$td = \frac{log_{10}2}{\mu}$$`
+--
+#### Parâmetros da segunda simulação
+&lt;table class="table" style="margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Parâmetro &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Valor Médio &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; D. Padrão &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; &lt;i&gt;t&lt;/i&gt; fase lag &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 15,0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; &lt;i&gt;t&lt;/i&gt; fase exponencial &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 17,5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; &lt;i&gt;t&lt;/i&gt; fase estacionária &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 24,0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; µ &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0,0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5e-05 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Y&lt;sub&gt;px&lt;/sub&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0,0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5e-04 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; X&lt;sub&gt;0&lt;/sub&gt; &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 20,0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; - &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+---
+## Comparação entre simulação e Fujikawa et al. (2006) - 23 °C
+&lt;img src="https://raw.githubusercontent.com/mustachius/ModeloLPM/cd9f2acfae51c3d7d5dbbb0d15793ea273c1db9d/Rplot13.png" width="700px" style="display: block; margin: auto;" /&gt;
+---
+class: middle, center, inverse
+
+# Conclusão
+---
+## Conclusão
+- Modelo LPM concebido para predizer produção de ácido láctico;
+  - condições controladas e otimizadas.
+
+--
+- Produção de enterotoxinas `-&gt;` processo sujeito à interferências diversas.
+--
+  - Temperatura (t);
+  - Concentração inicial (X&lt;sub&gt;0&lt;/sub&gt;);
+  - Disponibilidade de substrato;
+  - Presença de micro-organismos concorrentes;
+  - Condições de armazenamento do alimento;
+  - etc. 
+--
+&lt;br&gt;
+#### Portanto:
+&lt;center&gt; Modelo matemático capaz de descrever produção de enterotoxinas estafilocócicas &lt;b&gt;deve conter maior número de parâmetros considerados&lt;/b&gt;.&lt;/center&gt;
+---
+## Conclusão
+
+Modelo LPM pode reproduzir produção de enterotoxinas com precisão `-&gt;` número relativamente razoável de pontos experimentais.
+
+&lt;center&gt;&lt;h4&gt; A alternativa de reproduzir os resultados com modelos que envolvam a simulação do comportamento e produção de enterotoxinas pode ser alternativa promissora&lt;/h4&gt;&lt;/center&gt;
+---
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
