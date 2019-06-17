@@ -1,0 +1,619 @@
+---
+title: "Avaliação do modelo de Luedeking-Piret na predição da produção de toxinas, obedecendo a cinética de crescimento de Monod"
+author: "João Víctor Balestrin Sartor"
+date: "04/07/2019"
+output:
+  xaringan::moon_reader:
+    css: [default, uo, default-fonts]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE, digits = 3)
+```
+
+```{r include=FALSE}
+library(tidyverse)
+library(scales)
+library(knitr)
+library(kableExtra)
+library(formattable)
+library(dplyr)
+```
+
+```{r include=FALSE}
+tabela1<-readRDS("tab85.rds")
+sinan18<-readRDS("sinan18.rds")
+local_sinan<-readRDS("local_sinan.rds")
+lugar_sinan<-readRDS("lugar_sinan.rds")
+```
+
+background-image: url("https://raw.githubusercontent.com/mustachius/ProjetosR/master/Imagem1.png")
+background-position: top, 80%
+background-size: 30%
+class: center, middle
+
+# Autores:
+João Víctor Balestrin Sartor <br>
+<a href="mailto:jvsaga@gmail.com"></i>&nbsp; jvsaga@gmail.com</a><br>
+
+#### Departamento de Eng. de Alimentos e Eng. Química.
+**Orientador**:<br>
+Prof. Dr. Weber da Silva Robazza<sup>*</sup> <br>
+<a href="mailto:wrobazzi@yahoo.com.br"></i>&nbsp; wrobazzi@yahoo.com.br</a><br>
+
+**Coorientador**: <br>
+Prof. Dr. Alessandro Cazonatto Galvão<sup>*</sup> <br>
+<a href="mailto:eng.a.c.galvao@gmail.com"><i class="fa fa-paper-plane fa-fw"></i>&nbsp; eng.a.c.galvao@gmail.com</a><br>
+
+---
+class: center, middle, inverse
+
+# Estrutura
+---
+# Tabela de conteúdo
+
+1. *Staphylococcus aureus*;
+2. Patologia;
+3. Histórico de Surtos Alimentares no Brasil;
+4. Materiáis e Métodos;
+5. Resultados e Discussões;
+---
+# *Staphyloccocus aureus*
+
+.pull-right[<img src = "https://raw.githubusercontent.com/mustachius/ProjetosR/master/Staphylococcus-Aureus.jpg">]
+
+.pull-left[
+O gênero *Staphylococcus* abrange:
+- Gram positivas;
+- não formadora de esporos;
+- anaeróbias facultativas;
+- **catalase-positivas, ou negativas**;
+]
+--
+
+.pull-left[
+Família contém mais de **40 espécies reconhecidas** - divididas de acordo com a capacidade de produzir, ou não, a enzima catalase.
+
+- A grande maioria `->` coagulase-negativa.<br>
+- ***S. aureus* `->` coagulase-positivo.**
+]
+---
+# *Staphyloccocus aureus*
+.pull-left[
+```{r echo=FALSE, out.width="90%"}
+include_graphics("https://media.giphy.com/media/wlBqb0ps2NWUM/giphy.gif")
+```
+#### Nomenclaura baseada em seu formato geométrico:
+- *staphyle*`->`	"cacho"
+- *kokkos*`->`		"bagas"
+]
+
+--
+
+.pull-rigth[
+### Condições ótimas para crescimento: 
+- **Temperatura**: 35°C
+- **pH**: 7,0 ~ 7,5 `->` pode sobreviver à 4,5
+- **aw**: ≤ 0,8
+  
+### Associado à:
+ - Surtos alimentares com consumo de alimentos com **características variadas**;
+ - infecções de Pele;
+
+### Normalmente encontrado em:
+- Pele;
+- Mucosas;
+- Interior do nariz e orelhas;
+  
+  ]
+---
+class: middle, center, inverse
+
+# Patologia
+---
+class: center, middle
+<img src = "https://raw.githubusercontent.com/mustachius/ModeloLPM/master/Not%C3%ADcia%201.png" width = 600> <br>
+<small>Fonte: <a href="https://g1.globo.com/ciencia-e-saude/noticia/2019/02/12/fiquei-paraplegica-por-causa-de-um-piercing.ghtml"> G1, 2019</a></small>
+---
+class: center, middle
+![imagem 2](https://raw.githubusercontent.com/mustachius/ModeloLPM/master/Not%C3%ADcia%202.png)
+<small>Fonte: <a href="https://saude.estadao.com.br/noticias/geral,o-que-e-a-staphylococcus-aureus-bacteria-que-levou-a-morte-do-neto-de-lula,70002778278"> O Estado de São Paulo, 2019</a></small>
+---
+## Enterotoxinas Estafilocócicas (SE)
+
+- Dos vários compostos produzidos pelo *S. aureus*, o de maior interesse científico são as **enterotoxinas estafilocícicas**; <br>
+
+--
+
+### SE são compostos capazes de:
+- danificar membranas celulares;
+- desencadear Síndrome do Choque Tóxico;
+
+--
+
+<p><center><h3>S. aureus é capaz de produzir 23 tipos diferentes de compostos tóxicos diferentes;</h3></p></center>
+
+--
+<br>
+<center> Apenas 5 são classificadas como **Enterotoxinas Estafilocócicas Clássicas** e detectadas por testes comerciais: SEA, SEB, SEC, SED, SEE. <center>
+<br>
+--
+<center> Outras entorotoxinas também já foram sequenciadas: **G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V e X**. <center>
+
+---
+## Nomenclatura
+Cômitê Internacinal de Nomenclatura para Superantígenos de Staphylococcus (**INCSSN**) recomenda que o termo enterotoxina seja smente utilizado para compostos eméticos.
+
+--
+
+><p style = "font-size:25px;">Às demais toxinas designou-se o termo <b>"Enterotoxina estafilocócica semelhante a superantígeno"</b>, ou (Staphylococcal Enterotoxin-like Superantigens - <b>SEI</b>).</p>
+
+
+--
+<br>
+- SEJ, SEK, ..., SEU `->` SEIJ. SEIK, ..., SEIU.
+- Excessões: **SEIG, SEIH** e **SEII**, que já apresentaram atividade emética.
+
+
+--
+
+>SEF `->` comprovou-se posteriormente à sua descoberta que não produz atividade emética.
+
+---
+class: center, middle
+
+# Enterotoxinas clássicas possuem alta resistência e não são desnaturadas durante o processo de pasteurização.
+# SEA e SEC são as toxinas mais associadas à casos de intoxicação.
+---
+class: center, middle, inverse
+
+# Histórico de contaminação alimentar no Brasil
+---
+## Doenças transmitidas por alimentos - DTA's
+
+No Brasil, os casos de infecção estafilocócica não são de notificação compulsória ao Ministério da Saúde;
+
+Surtos de Doenças Transmitidas por Alimentos - DTA devem ser registrados compulsóriamente desde 2017.
+
+--
+
+>DTA - síndrome constituída de anorexia, náuseas, vômitos e/ou diarreia, acompanhada ou não de febre, relacionada à ingestão de alimentos ou água contaminados, podendo abranger tanto infecções como intoxicações alimentares.
+
+
+--
+- Podem ser causadas por bactérias, vírus, parasitas, toxinas, príons, agrotóxicos, substâncias químicas e metais pesados;
+
+- Quadro clínico variando desde desconfortos intestinais leves, até quadros extremamente sérios com desidratações graves, diarreia sanguinolenta e insuficiência renal aguda.
+---
+## Doenças transmitidas por alimentos - DTA's
+
+Define-se como surto, um episódio em que duas ou mais pessoas apresentam os mesmos sinais/sintomas após a ingestão de alimento e/ou água proveniente da mesma fonte.
+
+- Toda DTA `->` Evento de Saúde Pública - ESP.
+
+- ESP `->` Registro no Sistema de Informação de Agravos de Notificação (**SINAN**), em até sete dias.
+---
+class: center, middle
+![Investigação DTA](https://raw.githubusercontent.com/mustachius/ModeloLPM/master/investiga%C3%A7%C3%A3o%20SINAN.png)
+---
+### Acontecimento de surtos não segue um padrão definido
+- Políticas de prevenção e controle de DTA'a ineficientes ou inexistentes.
+![figura1](https://raw.githubusercontent.com/mustachius/ModeloLPM/master/Figura%201.png)
+---
+## Agentes mais comumente envlvidos em surtos de DTA no Brasil de 2000 à 2017
+
+```{r echo=FALSE}
+include_graphics("https://raw.githubusercontent.com/mustachius/ModeloLPM/master/Agente%20por%20regi%C3%A3o.png")
+```
+---
+## Objetivo Geral
+
+Avaliar a eficácia do modelo LPM na predição de produção de enterotoxinas por *Staphylococcus aureus* em **diferentes alimentos**, em **diferentes condições.**
+
+---
+
+## Objetivos específicos
+
+- Avaliar em quais condições de temperatura o modelo obtém mlehores resultados;
+- Estimar a dependência dos parâmetros do modelo com as condições ambientais;
+- Verificar as condições de validade do modelo.
+
+---
+class: center, middle, inverse
+
+# Materiais e métodos
+---
+## Dados experimentais
+.pull-left[
+
+Pesquisa em bases de dados conhecidas:
+- *"Staphylococcus aureus"*;
+- *"enterotoxin"*;
+- *"production"*;
+- *"detection"*;
+- *"modeling"*.
+
+Dados de crescimento e produção expressos em:
+- UFC/mL
+- g/mL
+]
+
+--
+.pull-right[
+### Get Data Graph Digitizer 2.23.0.20
+```{r echo=FALSE, fig.align='center'}
+include_graphics("https://raw.githubusercontent.com/mustachius/ModeloLPM/master/Imagem_getdata.jpg")
+```
+
+```{r echo=FALSE, fig.align='center'}
+include_graphics("https://raw.githubusercontent.com/mustachius/ModeloLPM/master/imagem_getdata2.gif")
+```
+
+]
+---
+## Súmário de dados
+
+<h3><center>8 Artigos `->` 55 curvas de crescimento de *S. aureus* + 55 curvas de produção de enterotoxinas.</h3></center>
+<br>
+<br>
+```{r echo=FALSE, results = "asis"}
+unit.scale = function(x) (x - min(x)) / (max(x) - min(x))
+Toxina<-c("SEA","SEB","SEC","SEC1","SEC2","SEH","A + C + D", "Total")
+Curvas<-c(22,3,15,2,2,2,9,55)
+tabela.toxinas<-data.frame(Toxina,Curvas)
+tabela.toxinas<-as.tbl(tabela.toxinas)
+  mutate(tabela.toxinas,
+    Curvas = color_bar("lightgreen", fun = unit.scale)(Curvas)) %>%
+  select(Toxina, everything()) %>%
+  kable(escape = F, align = c("l","r"))%>%
+  kable_styling(full_width = F)%>%
+  column_spec(1, width = "7em")%>% 
+  row_spec(8, bold = T)%>%
+  column_spec(2, width = "7em")
+```
+<br>
+<center>Temperatura variando entre 10°C e 48°C.<center>
+---
+##Modelagem Matemática
+
+
+- Confecção de "scripts" para tratamento de dados.
+  - Regressões não-lineares `->` algoritimo de *Levenberg-Marquardt*.
+
+--
+- R Project v. 3.5.3 (2019-03-11) – "Great Truth"
+- RStudio Version 1.1.463 (R Core Team, 2013;RStudio Team, 2018)
+- Pacote *minpack.lm*
+---
+##Modelo LPM
+
+### Equação de Luedeking-Piret (1959)
+<br>
+$$\frac{dP}{dt} = \alpha\frac{dX}{dt}+\beta X \tag{1}$$
+???
+$\alpha$ e $\beta$ `->` Constantes de proporcionalidade;<br>
+$X$ `->` Concentração microbiana; <br>
+$P$ `->` Expressa mg de ácido láctico por mL de solução (Luedeking-Piret) <br>
+$t$ `->` Tempo.
+
+--
+
+### Equação de Monod (1949)
+<br>
+$$\frac{dX}{dt} = \mu \cdot X \tag{2}$$
+???
+$\mu$ `->` Velocidade de crescimento específico
+
+--
+
+### Velocidade de crescimento específico
+<br>
+$$\mu = \frac{\mu_{max}\cdot S}{K_s + S} \tag{3}$$
+???
+$K_s$ -> constante de meia velocidade
+$S$ -> substrato limitante
+Pode-se assumir que quando a quantidade de substrato é muito grande, o valor de $u$ é praticamente o mesmo de $\mu_{max}$, pois a grande disponibilidade de alimento permite que o micro-organismo em questão desenvolva-se livremente. Ao diminuir-se o valor de $S$, o valor de $\mu$ será exatamente a metade de $\mu_{max}$ quando o valor de $K_s$ for igual à $S$.
+
+---
+### Garnier e Gaillet (2015)
+
+Taxa de consumo de $S$ como sendo $Y_{x/s}$, negligenciando a taxa de morte celular, de forma que o balanço de massa fica dependente da concentração de biomassa $S$.
+
+$$\frac{dS}{dt}= -q_s \cdot X \tag{4}$$
+
+???
+$q_s$ representa a taxa de consumo específico de substrato, relacionando-se diretamente com $\mu$
+
+
+--
+
+### Taxa de consumo específico de substrato
+$$q_s = \frac{\mu}{Y_{x/s}} \tag{5}$$
+
+--
+
+### Constante de rendimento celular
+$$ Y_{x/s}=\frac{dX}{dS} \tag{6}$$
+
+$Y_{x/s}$ também pode ser utilizado para expressar a relação entre o substrato limitante e a concentração microbiana de acordo com:
+
+$$S = \frac{1}{Y_{x/s}} \cdot (X_{max}-X) \tag{7}$$
+
+---
+Ao combinar as equações 1, 2 e 4
+
+$$t = a_1 \cdot ln\left(\frac{X}{X_0}\right) + a_2 \cdot ln\left(\frac{(X_{max}-X)}{(X_{max}-X_0)}\right) \tag{8}$$
+
+--
+Onde $a_1$ e $a_2$ são dados pelas seguintes relações:
+
+$$a_1 = \frac{(K_s\cdot Y_{x/s}+X_{max})}{\mu_{max} \cdot X_{max}} \tag{9}$$
+
+$$a_2 = - \frac{K_s \cdot Y_{x/s}}{\mu_{max} \cdot X_{max}} \tag{10}$$
+
+--
+A reorganização das variáveis permite calcular $\mu_{max}$ e obter o produto entre $K_S$ e $Y_{x/s}$ como:
+
+$$mu_{max}=\frac{1}{a_1+a_2} \tag{11}$$
+
+$$K_S \cdot Y_{x/s} =- \frac{a_2}{a_1+a_2}X_{max} \tag{12}$$
+---
+Finalmente, a quantidade de Produto (P) formado pode ser expressa como:
+
+$$P - P_0 = b_1 \cdot (X - X_0) + b_2 \cdot ln\left(\frac{X_{max}-X}{X_{max}-X_0}\right) \tag{13}$$
+--
+
+$$b_1 = \alpha + \frac{\beta}{\mu_{max}} \tag{14}$$
+
+$$b_2= - \frac{\beta \cdot K_S \cdot Y_{x/s}}{\mu_{max}} \tag{15}$$
+--
+### Parâmetros da equação de Luedeking-Piret:
+
+$$\alpha = b_1 + \frac{b_2}{K_S \cdot Y_{x/s}} \tag{16}$$
+
+$$\beta = - \frac{b_2 \cdot \mu_{max}}{K_s \cdot Y_{x/s}} \tag{17}$$
+
+--
+
+$$\frac{1}{N}\frac{dP}{dt} = \alpha k + \beta \tag{18}$$
+
+Uma vez que se divida a equação 1 por $N$ e que $k = (1/N)(dN/dt)$. Com $k$ sendo a taxa de crescimento específica (logarítmica) e $N$ a densidade bacteriana.
+---
+## Crescimento de *S. aureus*
+
+- Equação 8 foi ajustada à t e X.
+- X0 -> X quando t apresenta o menor valor.
+- Xmax -> valor ligeiramente superior ao maior valor de X.
+
+## Produção de enterotoxinas estafilocócicas
+
+Resultados da primeira regressão não-linear foram submetidos à Equação 13.
+---
+class: center, middle, inverse
+# Resultados e discussões
+---
+## Classificação dos conjuntos de dados
+
+- Curvas analisadas bastante heterogêneas;
+- Resultados obtidos heterogêneos.
+
+Borst e Betley (1993), Czop e Bergdoll (1974) e Otero et al. (1990) verificaram padrões de produção diferentes para cada enterotoxina.
+
+```{r echo=FALSE}
+Nota <-c(4,3,2,1)
+SA<-c("Fases de desenvolvimento bem definidas e função não crescente", "Fases de desenvolvimento não tão definidas e máximo de 1 (um) ponto distoando de função não crescente", "Fases de desenvolvimento não definidas e até de 30% dos pontos distoando de uma função não crescente","Fases de desenvolvimento indefinidas e mais de 30% dos pontos distoando de uma função não crescente")
+SE<-c("Ponto de início de produção de enterotoxina bem definido e função não crescente", "Ponto de início de produção de enterotoxina não tão definido e pelo menos um ponto distoando da função não crescente", "Ponto de início de produção de enterotoxina não tão definido e até de 30% dos pontos distoando de uma função não crescente", "Ponto de início de produção de enterotoxina indefinido e mais de 30% dos pontos distoando de uma função não crescente")
+tabela5<-data.frame(SA,SE,Nota)
+kable(tabela5,align = "llr", format = "html")%>%
+  kable_styling(font_size = 15, full_width = F)%>%
+  column_spec(1, width = "20em")%>%
+  column_spec(2, width = "20em")
+```
+---
+## Exemplos de notas para SA
+
+```{r Figura 7, echo=FALSE, fig.align='center'}
+include_graphics("https://raw.githubusercontent.com/mustachius/ModeloLPM/master/Figura%207.png")
+```
+---
+## Exemplos de notas para SE
+```{r Figura 8, echo=FALSE, fig.align='center'}
+include_graphics("https://raw.githubusercontent.com/mustachius/ModeloLPM/master/Figura%208.png")
+```
+---
+## Distribuição das notas para SA e SE
+```{r Figura 9, echo=FALSE, fig.align='center'}
+include_graphics("https://raw.githubusercontent.com/mustachius/ModeloLPM/master/Figura%209.png")
+```
+---
+## Sumário dos resultados da primeira regressão não-linear
+```{r echo=FALSE}
+#profiling_num
+Parâmetro<-c("a1","a2","b1","b2")
+Média<-c(255,374,17,4448)
+sd<-c(1346,3779,137,35899)
+var<-c(5.3,10,8,8.1)
+skewness<-c(0.93,-1.5,6.3,7.2) 
+kurtosis<-c(8.1,12,45,53)
+iqr<-c(248,73,3.3,4)
+Min<-c(-3077.19,-14053.92, -117.21, -7012.32)
+Max<-c(4550.28, 9455.39, 548.16, 123849.77)
+p.num<-data.frame(Parâmetro,Média,sd,var,skewness,kurtosis,iqr,Min,Max)
+names(p.num)<-c("Parâmetro","Média","D. Padrão","C. Variância","Oblíquidade","Curtose","IQR","Min","Max")
+kable(p.num,format='html',format.args = list(decimal.mark = ',', big.mark = ".")) %>%
+  add_header_above(c(" " = 7,"Range 98%" = 2))%>%
+  kable_styling(font_size = 15)
+```
+---
+## Sumário dos resultados da segunda regressão não-linear
+```{r echo=FALSE}
+#profiling_num segundo lote
+Parâmetro2<-c("umax","ks.ys","alpha","beta")
+Média2<-c(0.042,-26,0.89,0.14)
+sd2<-c(0.26,120,6.8,0.46)
+var2<-c(6.1,-4.6,7.7,3.2)
+skewness2<-c(2,-6.2,0.91,4.6) 
+kurtosis2<-c(14,42,11,24)
+iqr2<-c(0.057,14,1.2,0.092)
+min2<-c(-0.58,-538.42,-20.1,-0.06)
+max2<-c(0.97,38.22,23.91,2.3)
+p.num2<-data.frame(Parâmetro2,Média2,sd2,var2,skewness2,kurtosis2,iqr2,min2,max2)
+names(p.num2)<-c("Parâmetro","Média","D. Padrão","C. Variância","Oblíquidade","Curtose","IQR","Min","Max")
+kable(p.num2,format='html',format.args = list(decimal.mark = ',', big.mark = ".")) %>%
+  add_header_above(c(" " = 7,"Range 98%" = 2))%>%
+  kable_styling(font_size = 15)
+```
+---
+## Valores de referência
+
+- Classificação de curvas permitiu relacionar os dados de entrada e saída;
+- Curvas que obtiveram valores de nota 4 foram utilizadas como referência
+	- SA: 5 curvas
+	- SE: 8 curvas
+
+- Determinação dos valores adequados por curvas de densidade de probabilidade.
+---
+### Densidade de probabilidade para $a_{1}$, $a_{2}$, $b_{1}$ e $b_{2}$
+```{r echo=FALSE, fig.align='center'}
+include_graphics("https://raw.githubusercontent.com/mustachius/ModeloLPM/master/Figura%2010.png")
+```
+---
+### Densidade de probabilidade para $\mu_{max}$, $K_{s} \cdot Y_{x/s}$, $\alpha$ e $\beta$
+```{r echo=FALSE, fig.align='center'}
+include_graphics("https://raw.githubusercontent.com/mustachius/ModeloLPM/master/Figura%2011.png")
+```
+---
+## Sumário de probabilidade $a_{1}$, $a_{2}$, $b_{1}$ e $b_{2}$ 
+```{r echo=FALSE}
+min<-c(2.8801,-5.2506,-0.0957,-38.249)
+max<-c(19.498,-0.7834,31.485,-0.6549)
+Probabilidade<-c(0.0473904,0.491485,0.0473482,0.3216358)
+probdf<-data.frame(Parâmetro,min,max,Probabilidade)
+names(probdf)<-c("Parâmetro", "Min", "Max", "Probabilidade")
+kable(probdf, format='html',format.args = list(decimal.mark = ',', big.mark = "."))%>%
+  kable_styling(full_width = T)
+```
+
+## Sumário de probabilidade $\mu_{max}$, $K_{s} \cdot Y_{x/s}$, $\alpha$ e $\beta$
+```{r echo=FALSE}
+#tabela de probabilidades segundo lote
+min<-c(-0.694128809,-31.66599335,-1.343855458,0.027738227)
+max<-c(0.119594986,1.878934,-0.25754001,0.105284785)
+Probabilidade<-c(0.7834609, 0.614495, 0.2155642, 0.2375789)
+probdf2<-data.frame(Parâmetro2,min,max,Probabilidade)
+names(probdf2)<-c("Parâmetro", "Min", "Max", "Probabilidade")
+kable(probdf2, format='html',format.args = list(decimal.mark = ',', big.mark = "."))%>%
+  kable_styling(full_width = T)
+```
+---
+####Avaliou-se o Erro Percentual Médio (EPM) mais detalhadamente devido variação dos resultados.
+- SE real: 0,01 ng/g
+- SE pred: 0,19 ng/g
+
+.center[<center><h3>EPM = 1900%</h3></center>]
+
+####Para avaliar a influência das notas:
+- EPM para P < 1;
+- EPM para P > 1;
+	
+#### Regressões lineares de EPM em função de outros parâmetros.
+---
+class: middle, center
+```{r fig.align='center', echo=FALSE}
+include_graphics("https://raw.githubusercontent.com/mustachius/ModeloLPM/master/Tabela%2013.png")
+```
+---
+class: middle, center
+```{r fig.align='center', echo=FALSE}
+include_graphics("https://raw.githubusercontent.com/mustachius/ModeloLPM/master/Tabela%2014.png")
+```
+---
+class: middle, center, inverse
+# Simulação do crescimento de *S. aureus* e produção de enterotoxinas
+---
+# Simulação
+
+Utilizou-se modelo simplificado
+
+$$X = X_{0} \cdot 2^{\frac{t-tlag}{td}}$$
+
+$$P = P_{0} + log_{10} X \cdot Y_{px}$$
+
+Considerou-se:
+- $X_{0}$ como 20 unidades de *S. aureus*
+- $t$ variando entre 0 e 500 horas. <br>
+--
+
+#### Parâmetros da primeira simulação
+```{r echo=FALSE}
+par.f1<-c("<i>t</i> fase lag","<i>t</i> fase exponencial", "<i>t</i> fase estacionária", "μ", "Y<sub>px</sub>", "X<sub>0</sub>")
+med.f1<-c(15,40,100,0.001,0.002,20)
+sd.f1<-c(5,6,10,0.00005,0.0005,"-")
+f1<-data.frame(par.f1,med.f1,sd.f1)
+names(f1)<-c("Parâmetro", "Valor Médio", "D. Padrão")
+kable(f1,format='html',align = "lrr", escape=F,format.args = list(decimal.mark = ',', big.mark = "."))%>%
+  kable_styling(full_width = T)
+```
+---
+## Comparação entre simulação e Fujikawa et al. (2006) - 32 °C
+
+```{r Comparação 1, echo=FALSE, out.width = "700px", fig.align='center'}
+include_graphics("https://raw.githubusercontent.com/mustachius/ModeloLPM/master/Rplot12.png")
+```
+---
+> Variação de temperatura afeta crescimento bacteriano e produção de enterotoxinas.<br> 
+
+--
+- Nesta simulação expressa por <i>td</i>
+
+$$td = \frac{log_{10}2}{\mu}$$
+--
+#### Parâmetros da segunda simulação
+```{r echo=FALSE}
+par.f2<-c("<i>t</i> fase lag","<i>t</i> fase exponencial", "<i>t</i> fase estacionária", "μ", "Y<sub>px</sub>", "X<sub>0</sub>")
+med.f2<-c(15,17.5,24,0.0005,0.00005,20)
+sd.f2<-c(3,5,10,0.00005,0.0005,"-")
+f2<-data.frame(par.f2,med.f2,sd.f2)
+names(f2)<-c("Parâmetro", "Valor Médio", "D. Padrão")
+kable(f2,format='html',align = "lrr", escape=F,format.args = list(decimal.mark = ',', big.mark = "."))%>%
+  kable_styling(full_width = T)
+``` 
+---
+## Comparação entre simulação e Fujikawa et al. (2006) - 23 °C
+```{r Comparação 2, echo=FALSE, out.width= "700px", fig.align='center'}
+include_graphics("https://raw.githubusercontent.com/mustachius/ModeloLPM/cd9f2acfae51c3d7d5dbbb0d15793ea273c1db9d/Rplot13.png")
+```
+---
+class: middle, center, inverse
+
+# Conclusão
+---
+## Conclusão
+- Modelo LPM concebido para predizer produção de ácido láctico;
+  - condições controladas e otimizadas.
+
+--
+- Produção de enterotoxinas `->` processo sujeito à interferências diversas.
+--
+  - Temperatura (t);
+  - Concentração inicial (X<sub>0</sub>);
+  - Disponibilidade de substrato;
+  - Presença de micro-organismos concorrentes;
+  - Condições de armazenamento do alimento;
+  - etc. 
+--
+<br>
+#### Portanto:
+<center> Modelo matemático capaz de descrever produção de enterotoxinas estafilocócicas <b>deve conter maior número de parâmetros considerados</b>.</center>
+---
+## Conclusão
+
+Modelo LPM pode reproduzir produção de enterotoxinas com precisão `->` número relativamente razoável de pontos experimentais.
+
+<center><h4> A alternativa de reproduzir os resultados com modelos que envolvam a simulação do comportamento e produção de enterotoxinas pode ser alternativa promissora</h4></center>
+---
+
