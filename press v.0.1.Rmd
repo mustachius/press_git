@@ -1,5 +1,5 @@
 ---
-title: "Avaliação do modelo de Luedeking-Piret na predição da produção de toxinas, obedecendo a cinética de crescimento de Monod"
+title: "Avaliação da eficiência do modelo de Luedeking-Piret-Monod para predição da produção de enterotoxinas por Staphylococcus aureus"
 author: "João Víctor Balestrin Sartor"
 date: "04/07/2019"
 output:
