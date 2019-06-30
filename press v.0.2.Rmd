@@ -243,86 +243,6 @@ Políticas de prevenção e controle de DTA'a ineficientes ou inexistentes.
 include_graphics("https://raw.githubusercontent.com/mustachius/ModeloLPM/master/Agente%20por%20regi%C3%A3o.png")
 ```
 ---
-## Objetivo Geral
-
-Avaliar a eficácia do modelo LPM na predição de produção de enterotoxinas por *Staphylococcus aureus* em **diferentes alimentos**, em **diferentes condições.**
-
----
-
-## Objetivos específicos
-
-- Avaliar em quais condições de temperatura o modelo obtém melhores resultados;
-- Estimar a dependência dos parâmetros do modelo com as condições ambientais;
-- Verificar as condições de validade do modelo.
-
----
-class: center, middle, inverse
-
-# Materiais e métodos
----
-## Dados experimentais
-.pull-left[
-
-Pesquisa em bases de dados conhecidas:
-- *"Staphylococcus aureus"*;
-- *"enterotoxin"*;
-- *"production"*;
-- *"detection"*;
-- *"modeling"*.
-
-Dados de crescimento e produção expressos em:
-- UFC/mL
-- g/mL
-]
-
---
-.pull-right[
-### Get Data Graph Digitizer 2.23.0.20
-```{r echo=FALSE, fig.align='center'}
-include_graphics("https://raw.githubusercontent.com/mustachius/ModeloLPM/master/Imagem_getdata.jpg")
-```
-
-```{r echo=FALSE, fig.align='center'}
-include_graphics("https://raw.githubusercontent.com/mustachius/ModeloLPM/master/imagem_getdata2.gif")
-```
-
-]
----
-## Sumário de dados
-
-<h3><center>8 Artigos → 55 curvas de crescimento de *S. aureus*  + 55 curvas de produção de enterotoxinas.</h3></center>
-<br>
-<br>
-```{r echo=FALSE, results = "asis"}
-unit.scale = function(x) (x - min(x)) / (max(x) - min(x))
-Toxina<-c("SEA","SEB","SEC","SEC1","SEC2","SEH","A + C + D", "Total")
-Curvas<-c(22,3,15,2,2,2,9,55)
-tabela.toxinas<-data.frame(Toxina,Curvas)
-tabela.toxinas<-as.tbl(tabela.toxinas)
-  mutate(tabela.toxinas,
-    Curvas = color_bar("lightgreen", fun = unit.scale)(Curvas)) %>%
-  select(Toxina, everything()) %>%
-  kable(escape = F, align = c("l","r"))%>%
-  kable_styling(full_width = F)%>%
-  column_spec(1, width = "7em")%>% 
-  row_spec(8, bold = T)%>%
-  column_spec(2, width = "7em")
-```
-<br>
-<center>Temperatura variando entre 10°C e 48°C.<center>
----
-## Preparação do algoritmo
-
-
-- Confecção de "scripts" para tratamento de dados.
-  - Regressões não-lineares → algoritmo de *Levenberg-Marquardt*.
-
---
-<br>
-- R Project v. 3.5.3 (2019-03-11) – "Great Truth"
-- RStudio Version 1.1.463 (R Core Team, 2013;RStudio Team, 2018)
-- Pacote *minpack.lm*
----
 ##Modelo LPM
 
 ### Equação de Luedeking-Piret (1959)
@@ -430,11 +350,87 @@ $$\alpha = b_1 + \frac{b_2}{K_S \cdot Y_{x/s}} \tag{16}$$
 
 $$\beta = - \frac{b_2 \cdot \mu_{max}}{K_s \cdot Y_{x/s}} \tag{17}$$
 
---
 
-$$\frac{1}{N}\frac{dP}{dt} = \alpha k + \beta \tag{18}$$
-???
-Uma vez que se divida a equação 1 por $N$ e que $k = (1/N)(dN/dt)$. Com $k$ sendo a taxa de crescimento específica (logarítmica) e **$N$ a densidade bacteriana.**
+---
+## Objetivo Geral
+
+Avaliar a eficácia do modelo LPM na predição de produção de enterotoxinas por *Staphylococcus aureus* em **diferentes alimentos**, em **diferentes condições.**
+
+---
+
+## Objetivos específicos
+
+- Avaliar em quais condições de temperatura o modelo obtém melhores resultados;
+- Estimar a dependência dos parâmetros do modelo com as condições ambientais;
+- Verificar as condições de validade do modelo.
+
+---
+class: center, middle, inverse
+
+# Materiais e métodos
+---
+## Dados experimentais
+.pull-left[
+
+Pesquisa em bases de dados conhecidas:
+- *"Staphylococcus aureus"*;
+- *"enterotoxin"*;
+- *"production"*;
+- *"detection"*;
+- *"modeling"*.
+
+Dados de crescimento e produção expressos em:
+- UFC/mL
+- g/mL
+]
+
+--
+.pull-right[
+### Get Data Graph Digitizer 2.23.0.20
+```{r echo=FALSE, fig.align='center'}
+include_graphics("https://raw.githubusercontent.com/mustachius/ModeloLPM/master/Imagem_getdata.jpg")
+```
+
+```{r echo=FALSE, fig.align='center'}
+include_graphics("https://raw.githubusercontent.com/mustachius/ModeloLPM/master/imagem_getdata2.gif")
+```
+
+]
+---
+## Sumário de dados
+
+<h3><center>8 Artigos → 55 curvas de crescimento de *S. aureus*  + 55 curvas de produção de enterotoxinas.</h3></center>
+<br>
+<br>
+```{r echo=FALSE, results = "asis"}
+unit.scale = function(x) (x - min(x)) / (max(x) - min(x))
+Toxina<-c("SEA","SEB","SEC","SEC1","SEC2","SEH","A + C + D", "Total")
+Curvas<-c(22,3,15,2,2,2,9,55)
+tabela.toxinas<-data.frame(Toxina,Curvas)
+tabela.toxinas<-as.tbl(tabela.toxinas)
+  mutate(tabela.toxinas,
+    Curvas = color_bar("lightgreen", fun = unit.scale)(Curvas)) %>%
+  select(Toxina, everything()) %>%
+  kable(escape = F, align = c("l","r"))%>%
+  kable_styling(full_width = F)%>%
+  column_spec(1, width = "7em")%>% 
+  row_spec(8, bold = T)%>%
+  column_spec(2, width = "7em")
+```
+<br>
+<center>Temperatura variando entre 10°C e 48°C.<center>
+---
+## Preparação do algoritmo
+
+
+- Confecção de "scripts" para tratamento de dados.
+  - Regressões não-lineares → algoritmo de *Levenberg-Marquardt*.
+
+--
+<br>
+- R Project v. 3.5.3 (2019-03-11) – "Great Truth"
+- RStudio Version 1.1.463 (R Core Team, 2013;RStudio Team, 2018)
+- Pacote *minpack.lm*
 ---
 ## Crescimento de *S. aureus*
 
@@ -692,7 +688,7 @@ class: middle, center, inverse
   - condições controladas e otimizadas.
 
 --
-- Produção de enterotoxinas → processo sujeito à interferências diversas.
+- Produção de enterotoxinas → processo sujeito a interferências diversas.
 --
   - Temperatura (t);
   - Concentração inicial (X<sub>0</sub>);
@@ -709,6 +705,6 @@ class: middle, center, inverse
 
 Modelo LPM pode reproduzir produção de enterotoxinas com precisão → número relativamente razoável de pontos experimentais.
 
-<center><h4> A alternativa de reproduzir os resultados com modelos que envolvam a simulação do comportamento e produção de enterotoxinas pode ser alternativa promissora</h4></center>
+<center><h4> A possibilidade de reproduzir os resultados com modelos que envolvam a simulação do comportamento e produção de enterotoxinas pode ser alternativa promissora</h4></center>
 
 
