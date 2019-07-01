@@ -64,10 +64,11 @@ class: center, middle, inverse
   * Características;
   * Patologia;
   * Histórico de Surtos Alimentares no Brasil.
-2. Materiais e Métodos
+2. Modelagem matemática
   * O Modelo LPM.
-3. Resultados e Discussões.
-4. Conclusão.
+3. Materiais e Métodos.
+4. Resultados e Discussões.
+5. Conclusão.
 ---
 # *Staphyloccocus aureus*
 
