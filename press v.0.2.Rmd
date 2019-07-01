@@ -184,12 +184,6 @@ Comitê Internacional de Nomenclatura para Superantígenos de Staphylococcus (**
 <br>
 - SEJ, SEK, ..., SEU → SEIJ. SEIK, ..., SEIU. <br>
   - Exceções: **SEIG, SEIH** e **SEII**, que já apresentaram atividade emética.
-
-
---
-
->SEF → comprovou-se posteriormente à sua descoberta que não produz atividade emética.
-
 ---
 class: center, middle
 
@@ -331,7 +325,7 @@ $$a_2 = - \frac{K_s \cdot Y_{x/s}}{\mu_{max} \cdot X_{max}} \tag{10}$$
 ---
 A reorganização das variáveis permite calcular $\mu_{max}$ e obter o produto entre $K_S$ e $Y_{x/s}$ como:
 
-$$mu_{max}=\frac{1}{a_1+a_2} \tag{11}$$
+$$\mu_{max}=\frac{1}{a_1+a_2} \tag{11}$$
 
 $$K_S \cdot Y_{x/s} =- \frac{a_2}{a_1+a_2}X_{max} \tag{12}$$
 ---
@@ -615,12 +609,12 @@ kable(probdf2,escape=F, format='html',format.args = list(decimal.mark = ',', big
 ---
 class: middle, center
 ```{r fig.align='center', echo=FALSE}
-include_graphics("https://raw.githubusercontent.com/mustachius/ModeloLPM/master/Tabela%2013.png")
+include_graphics("https://raw.githubusercontent.com/mustachius/press_git/gh-pages/tabreg1.png")
 ```
 ---
 class: middle, center
 ```{r fig.align='center', echo=FALSE}
-include_graphics("https://raw.githubusercontent.com/mustachius/ModeloLPM/master/Tabela%2014.png")
+include_graphics("https://raw.githubusercontent.com/mustachius/press_git/gh-pages/tabreg2.png")
 ```
 ---
 class: middle, center, inverse
@@ -662,8 +656,8 @@ include_graphics("https://raw.githubusercontent.com/mustachius/ModeloLPM/master/
 - Nesta simulação expressa por <i>td</i>
 
 $$td = \frac{log_{10}2}{\mu}$$
---
-#### Parâmetros da segunda simulação
+---
+### Parâmetros da segunda simulação
 ```{r echo=FALSE}
 par.f2<-c("<i>t</i> fase lag","<i>t</i> fase exponencial", "<i>t</i> fase estacionária", "μ", "Y<sub>px</sub>", "X<sub>0</sub>")
 med.f2<-c(15,17.5,24,0.0005,0.00005,20)
@@ -706,5 +700,8 @@ class: middle, center, inverse
 Modelo LPM pode reproduzir produção de enterotoxinas com precisão → número relativamente razoável de pontos experimentais.
 
 <center><h4> A possibilidade de reproduzir os resultados com modelos que envolvam a simulação do comportamento e produção de enterotoxinas pode ser alternativa promissora</h4></center>
+---
+class: middle, center
 
+Obrigado!
 
