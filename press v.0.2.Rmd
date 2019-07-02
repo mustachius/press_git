@@ -610,12 +610,12 @@ kable(probdf2,escape=F, format='html',format.args = list(decimal.mark = ',', big
 ---
 class: middle, center
 ```{r fig.align='center', echo=FALSE}
-include_graphics("https://raw.githubusercontent.com/mustachius/press_git/gh-pages/tabreg1.png")
+include_graphics("https://raw.githubusercontent.com/mustachius/press_git/master/tabela%20reg_1.png")
 ```
 ---
 class: middle, center
 ```{r fig.align='center', echo=FALSE}
-include_graphics("https://raw.githubusercontent.com/mustachius/press_git/gh-pages/tabreg2.png")
+include_graphics("https://raw.githubusercontent.com/mustachius/press_git/master/tabela%20reg_2.png")
 ```
 ---
 class: middle, center, inverse
