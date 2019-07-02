@@ -607,10 +607,12 @@ kable(probdf2,escape=F, format='html',format.args = list(decimal.mark = ',', big
 - EPM para P > 1;
 	
 #### Regressões lineares de EPM em função de outros parâmetros.
+???
+EPM muito sensível à valores <1, influencia no resultado.
 ---
 class: middle, center
 ```{r fig.align='center', echo=FALSE}
-include_graphics("https://raw.githubusercontent.com/mustachius/press_git/master/tabela%20reg_1.png")
+include_graphics("https://raw.githubusercontent.com/mustachius/press_git/gh-pages/tabreg1.png")
 ```
 ???
 ROOT MEAN SQUARE ERROR - RAIZ DO ERRO MÉDIO QUADRÁTICO
@@ -621,7 +623,7 @@ Mean Absolute Error -
 ---
 class: middle, center
 ```{r fig.align='center', echo=FALSE}
-include_graphics("https://raw.githubusercontent.com/mustachius/press_git/master/tabela%20reg_2.png")
+include_graphics("https://raw.githubusercontent.com/mustachius/press_git/gh-pages/tabreg2.png")
 ```
 ---
 class: middle, center, inverse
@@ -638,6 +640,7 @@ $$P = P_{0} + log_{10} X \cdot Y_{px}$$
 Considerou-se:
 - $X_{0}$ como 20 unidades de *S. aureus*
 - $t$ variando entre 0 e 500 horas. <br>
+
 --
 
 #### Parâmetros da primeira simulação
@@ -650,6 +653,10 @@ names(f1)<-c("Parâmetro", "Valor Médio", "D. Padrão")
 kable(f1,format='html',align = "lrr", escape=F,format.args = list(decimal.mark = ',', big.mark = "."))%>%
   kable_styling(full_width = T)
 ```
+???
+td -> tempo duplicação celular
+ypx -> taxa de produão de enterotoxina por bactéria
+
 ---
 ## Comparação entre simulação e Fujikawa et al. (2006) - 32 °C
 
